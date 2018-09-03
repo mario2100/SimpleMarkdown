@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 import com.wbrawner.simplemarkdown.MarkdownApplication;
 import com.wbrawner.simplemarkdown.R;
 import com.wbrawner.simplemarkdown.presentation.MarkdownPresenter;
@@ -62,9 +64,8 @@ public class EditFragment extends Fragment implements MarkdownEditView {
         if (activity != null) {
             ((MarkdownApplication) activity.getApplication()).getComponent().inject(this);
         }
-        Observable<String> obs = RxTextView.textChanges(markdownEditor)
+        Observable<TextViewAfterTextChangeEvent> obs = RxTextView.afterTextChangeEvents(markdownEditor)
                 .debounce(50, TimeUnit.MILLISECONDS)
-                .map(CharSequence::toString)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
         obs.subscribe(new MarkdownObserver(presenter, obs));
