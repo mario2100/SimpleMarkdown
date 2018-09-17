@@ -68,8 +68,7 @@ public class EditFragment extends Fragment implements MarkdownEditView {
                 .debounce(50, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        obs.subscribe(new MarkdownObserver(presenter, obs));
-        obs.subscribe(new ReadabilityObserver(markdownEditor));
+        obs.subscribe(new ReadabilityObserver());
         return view;
     }
 
